@@ -1,23 +1,71 @@
 call plug#begin('~/.vim/plugged/vim_plugins')
+"lsp server
 Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'mattn/vim-lsp-settings'
-Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-lua/plenary.nvim'
+"snippets 
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
-Plug 'EdenEast/nightfox.nvim' 
+"syntax highlighting
+Plug 'nvim-telescope/telescope.nvim'
+"icons
 Plug 'ryanoasis/vim-devicons'
+"colorschemes
+Plug 'EdenEast/nightfox.nvim' 
+"clang-format
+Plug 'rhysd/vim-clang-format'
+"statusline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+"vim cmake
+Plug 'cdelledonne/vim-cmake'
+"vim gitgutter
+Plug 'airblade/vim-gitgutter'
+"fuzzy finder
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 call plug#end()
 
-""" jk == normal mode """
-imap        jk <ESC>
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ some settings -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+imap    jk <ESC>
+set encoding=UTF-8
+set number 
+set laststatus=2
+set tabstop=4
+set expandtab
+set shiftwidth=4
+set mouse=a
+set clipboard=unnamedplus
+set undofile 
+set undodir=~/.vim/plugged/vim_plugins/undodir
+set termguicolors 
+"set ttimeout
+"set ttimeoutlen=1
+"set ttyfast
+" move line or visually selected block 
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+vnoremap <A-k> :m '<-2<CR>gv=gv
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+"autocmd InsertEnter,InsertLeave * set cul!
+"change cursor to line when in insert mode
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7" 
 
-""""" colorscheme """"""
-colorscheme duskfox
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ statusline -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+let g:airline#extensions#tabline#enabled = 1
 
-"""""" Vim snip """"""
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+colorscheme duskfox 
+
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ vim lsp -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 if executable('pylsp')
     " pip install python-lsp-server
     au User lsp_setup call lsp#register_server({
@@ -56,7 +104,30 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
-""""" Auto pairs """""
+set foldmethod=expr
+  \ foldexpr=lsp#ui#vim#folding#foldexpr()
+  \ foldtext=lsp#ui#vim#folding#foldtext()
+
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ clang-format -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++17"}
+
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" if you install vim-operator-user
+autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
+autocmd FileType c ClangFormatAutoEnable 
+autocmd FileType cpp ClangFormatAutoEnable 
+autocmd Filetype js ClangFormatAutoEnable 
+autocmd Filetype ts ClangFormatAutoEnable 
+
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ auto pairs -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 inoremap " ""<left>
 inoremap ' ''<left>
 inoremap ( ()<left>
@@ -65,7 +136,7 @@ inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
 
-"""""" Vim Snip """"""
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ vim snips -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 " Expand
 imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
 smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
@@ -92,7 +163,9 @@ let g:vsnip_filetypes = {}
 let g:vsnip_filetypes.javascriptreact = ['javascript']
 let g:vsnip_filetypes.typescriptreact = ['typescript']
 
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ completion -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
-"""""" webdevicons
-set encoding=UTF-8
 
