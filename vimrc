@@ -7,18 +7,17 @@ Plug 'mattn/vim-lsp-settings'
 Plug 'nvim-lua/plenary.nvim'
 "snippets 
 Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/vim-vsnip-integ'
-"syntax highlighting
-Plug 'nvim-telescope/telescope.nvim'
-"icons
+Plug 'hrsh7th/vim-vsnip-integ' "syntax highlighting 
+Plug 'nvim-telescope/telescope.nvim' "icons
 Plug 'ryanoasis/vim-devicons'
 "colorschemes
 Plug 'EdenEast/nightfox.nvim' 
-"clang-format
+""clang-format
+Plug 'kana/vim-operator-user'
 Plug 'rhysd/vim-clang-format'
 "statusline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+""Plug 'vim-airline/vim-airline'
+""Plug 'vim-airline/vim-airline-themes'
 "vim cmake
 Plug 'cdelledonne/vim-cmake'
 "vim gitgutter
@@ -29,10 +28,12 @@ Plug 'junegunn/fzf.vim'
 call plug#end()
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ some settings -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+
 imap    jk <ESC>
+vmap    nm <ESC>
 set encoding=UTF-8
 set number 
-set laststatus=2
+"set laststatus=2
 set tabstop=4
 set expandtab
 set shiftwidth=4
@@ -41,40 +42,23 @@ set clipboard=unnamedplus
 set undofile 
 set undodir=~/.vim/plugged/vim_plugins/undodir
 set termguicolors 
-"set ttimeout
-"set ttimeoutlen=1
-"set ttyfast
 " move line or visually selected block 
-inoremap <A-j> <Esc>:m .+1<CR>==gi
 vnoremap <A-k> :m '<-2<CR>gv=gv
 inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
-"autocmd InsertEnter,InsertLeave * set cul!
-"change cursor to line when in insert mode
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7" 
+inoremap <A-j> <Esc>:m .+1<CR>==gi
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ statusline -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-let g:airline#extensions#tabline#enabled = 1
+""let g:airline_theme='base16'
+""let g:airline#extensions#tabline#enabled = 1
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-colorscheme duskfox 
-
-" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+colorscheme nordfox 
+"_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ vim lsp -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-if executable('pylsp')
-    " pip install python-lsp-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pylsp',
-        \ 'cmd': {server_info->['pylsp']},
-        \ 'allowlist': ['python'],
-        \ })
-endif
-
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
@@ -93,7 +77,7 @@ function! s:on_lsp_buffer_enabled() abort
     nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
     let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    autocmd! BufWritePre *.cpp,*.c,*.rs,*.go call execute('LspDocumentFormatSync')
     
     " refer to doc to add more commands
 endfunction
@@ -113,8 +97,8 @@ let g:clang_format#style_options = {
             \ "AccessModifierOffset" : -4,
             \ "AllowShortIfStatementsOnASingleLine" : "true",
             \ "AlwaysBreakTemplateDeclarations" : "true",
-            \ "Standard" : "C++17"}
-
+            \ "Standard" : "c++17"}
+let g:clang_format#code_style = "llvm"
 " map to <Leader>cf in C++ code
 autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
@@ -124,8 +108,7 @@ autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
 nmap <Leader>C :ClangFormatAutoToggle<CR>
 autocmd FileType c ClangFormatAutoEnable 
 autocmd FileType cpp ClangFormatAutoEnable 
-autocmd Filetype js ClangFormatAutoEnable 
-autocmd Filetype ts ClangFormatAutoEnable 
+
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ auto pairs -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 inoremap " ""<left>
@@ -140,28 +123,17 @@ inoremap {;<CR> {<CR>};<ESC>O
 " Expand
 imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
 smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-
 " Expand or jump
 imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-
 " Jump forward or backward
 imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
 smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
 imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 
-" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
-" See https://github.com/hrsh7th/vim-vsnip/pull/50
-nmap        s   <Plug>(vsnip-select-text)
-xmap        s   <Plug>(vsnip-select-text)
-nmap        S   <Plug>(vsnip-cut-text)
-xmap        S   <Plug>(vsnip-cut-text)
-
 " If you want to use snippet for multiple filetypes, you can `g:vsnip_filetypes` for it.
 let g:vsnip_filetypes = {}
-let g:vsnip_filetypes.javascriptreact = ['javascript']
-let g:vsnip_filetypes.typescriptreact = ['typescript']
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ completion -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
