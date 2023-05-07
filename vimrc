@@ -15,9 +15,6 @@ Plug 'EdenEast/nightfox.nvim'
 ""clang-format
 Plug 'kana/vim-operator-user'
 Plug 'rhysd/vim-clang-format'
-"statusline
-""Plug 'vim-airline/vim-airline'
-""Plug 'vim-airline/vim-airline-themes'
 "vim cmake
 Plug 'cdelledonne/vim-cmake'
 "vim gitgutter
@@ -25,6 +22,8 @@ Plug 'airblade/vim-gitgutter'
 "fuzzy finder
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+"auto pairs 
+Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ some settings -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
@@ -48,12 +47,9 @@ inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 inoremap <A-j> <Esc>:m .+1<CR>==gi
 
-" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ statusline -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-""let g:airline_theme='base16'
-""let g:airline#extensions#tabline#enabled = 1
-
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 colorscheme nordfox 
+
 "_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
@@ -98,7 +94,8 @@ let g:clang_format#style_options = {
             \ "AllowShortIfStatementsOnASingleLine" : "true",
             \ "AlwaysBreakTemplateDeclarations" : "true",
             \ "Standard" : "c++17"}
-let g:clang_format#code_style = "llvm"
+let g:clang_format#code_style = "mozilla"
+"google chromium llvm mozilla
 " map to <Leader>cf in C++ code
 autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
@@ -111,13 +108,13 @@ autocmd FileType cpp ClangFormatAutoEnable
 
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ auto pairs -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-inoremap " ""<left>
-inoremap ' ''<left>
-inoremap ( ()<left>
-inoremap [ []<left>
-inoremap { {}<left>
-inoremap {<CR> {<CR>}<ESC>O
-inoremap {;<CR> {<CR>};<ESC>O
+""inoremap " ""<left>
+""inoremap ' ''<left>
+""inoremap ( ()<left>
+""inoremap [ []<left>
+""inoremap { {}<left>
+""inoremap {<CR> {<CR>}<ESC>O
+""inoremap {;<CR> {<CR>};<ESC>O
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ vim snips -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 " Expand
