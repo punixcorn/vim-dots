@@ -12,6 +12,7 @@ Plug 'nvim-telescope/telescope.nvim' "icons
 Plug 'ryanoasis/vim-devicons'
 "colorschemes
 Plug 'EdenEast/nightfox.nvim' 
+Plug 'thedenisnikulin/vim-cyberpunk'
 ""clang-format
 Plug 'kana/vim-operator-user'
 Plug 'rhysd/vim-clang-format'
@@ -48,7 +49,8 @@ vnoremap <A-j> :m '>+1<CR>gv=gv
 inoremap <A-j> <Esc>:m .+1<CR>==gi
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-colorscheme nordfox 
+colorscheme duskfox
+
 
 "_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 nmap ]h <Plug>(GitGutterNextHunk)
