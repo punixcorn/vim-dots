@@ -6,13 +6,15 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'mattn/vim-lsp-settings'
 Plug 'nvim-lua/plenary.nvim'
 "snippets 
-Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/vim-vsnip-integ' "syntax highlighting 
-Plug 'nvim-telescope/telescope.nvim' "icons
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+" icons
+Plug 'nvim-telescope/telescope.nvim' 
 Plug 'ryanoasis/vim-devicons'
 "colorschemes
 Plug 'EdenEast/nightfox.nvim' 
 Plug 'thedenisnikulin/vim-cyberpunk'
+Plug 'morhetz/gruvbox' 
 ""clang-format
 Plug 'kana/vim-operator-user'
 Plug 'rhysd/vim-clang-format'
@@ -27,13 +29,13 @@ Plug 'junegunn/fzf.vim'
 Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
-" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ some settings -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ some settings -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 imap    jk <ESC>
 vmap    nm <ESC>
+tnoremap <ESC> <C-\><C-n>
 set encoding=UTF-8
 set number 
-"set laststatus=2
 set tabstop=4
 set expandtab
 set shiftwidth=4
@@ -42,15 +44,17 @@ set clipboard=unnamedplus
 set undofile 
 set undodir=~/.vim/plugged/vim_plugins/undodir
 set termguicolors 
+
 " move line or visually selected block 
-vnoremap <A-k> :m '<-2<CR>gv=gv
-inoremap <A-k> <Esc>:m .-2<CR>==gi
-vnoremap <A-j> :m '>+1<CR>gv=gv
-inoremap <A-j> <Esc>:m .+1<CR>==gi
+vnoremap <A-k> :move '<-2<CR>gv=gv
+inoremap <A-k> <Esc>:move .-2<CR>==gi
+vnoremap <A-j> :move '>+1<CR>gv=gv
+inoremap <A-j> <Esc>:move .+1<CR>==gi
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-colorscheme duskfox
-
+let g:gruvbox_contrast_dark='soft'
+set bg=dark " needed for dark  gruvbox
+colorscheme gruvbox
 
 "_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 nmap ]h <Plug>(GitGutterNextHunk)
@@ -73,11 +77,11 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> K <plug>(lsp-hover)
     nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
     nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
-
-    let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.cpp,*.c,*.rs,*.go call execute('LspDocumentFormatSync')
-    
-    " refer to doc to add more commands
+"
+"    let g:lsp_format_sync_timeout = 1000
+"    autocmd! BufWritePre *.cpp,*.c,*.rs,*.go call execute('LspDocumentFormatSync')
+"    
+"    " refer to doc to add more commands
 endfunction
 
 augroup lsp_install
@@ -109,30 +113,32 @@ autocmd FileType c ClangFormatAutoEnable
 autocmd FileType cpp ClangFormatAutoEnable 
 
 
-" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ auto pairs -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-""inoremap " ""<left>
-""inoremap ' ''<left>
-""inoremap ( ()<left>
-""inoremap [ []<left>
-""inoremap { {}<left>
-""inoremap {<CR> {<CR>}<ESC>O
-""inoremap {;<CR> {<CR>};<ESC>O
+"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ utlilsnips -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+
+" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<Tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ vim snips -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 " Expand
-imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+"imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+"smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
 " Expand or jump
-imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+"imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+"smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 " Jump forward or backward
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+"imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+"smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+"imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+"smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 
 " If you want to use snippet for multiple filetypes, you can `g:vsnip_filetypes` for it.
-let g:vsnip_filetypes = {}
+"let g:vsnip_filetypes = {}
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ completion -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
