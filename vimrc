@@ -35,6 +35,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'lervag/vimtex'
 "which key
 Plug 'liuchengxu/vim-which-key'
+"pywal 
+Plug 'dense-analysis/ale'
 call plug#end()
 
 
@@ -64,7 +66,7 @@ let g:gruvbox_contrast_dark='soft'
 set bg=dark " needed for dark  gruvbox
 colorscheme gruvbox
 
-"_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ colorscheme -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+"_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ GitGutter -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 
@@ -91,16 +93,16 @@ function! s:on_lsp_buffer_enabled() abort
 "    
 "    " refer to doc to add more commands
 endfunction
-
+let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
 augroup lsp_install
     au!
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
-set foldmethod=expr
-  \ foldexpr=lsp#ui#vim#folding#foldexpr()
-  \ foldtext=lsp#ui#vim#folding#foldtext()
+"set foldmethod=expr
+" \ foldexpr=lsp#ui#vim#folding#foldexpr()
+"  \ foldtext=lsp#ui#vim#folding#foldtext()
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ clang-format -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 let g:clang_format#style_options = {
@@ -171,7 +173,6 @@ let g:vimtex_view_method = 'zathura'
 " Or with a generic interface:
 let g:vimtex_view_general_viewer = 'okular'
 let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
-
 " VimTeX uses latexmk as the default compiler backend. If you use it, which is
 " strongly recommended, you probably don't need to configure anything. If you
 " want another compiler backend, you can change it as follows. The list of
