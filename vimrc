@@ -23,7 +23,7 @@ Plug 'morhetz/gruvbox'
 Plug 'kana/vim-operator-user'
 Plug 'rhysd/vim-clang-format'
 "vim cmake
-Plug 'cdelledonne/vim-cmake'
+"Plug 'cdelledonne/vim-cmake'
 "vim gitgutter
 Plug 'airblade/vim-gitgutter'
 "fuzzy finder
@@ -160,6 +160,7 @@ inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 " This is necessary for VimTeX to load properly. The "indent" is optional.
 " Note that most plugin managers will do this automatically.
 filetype plugin indent on
+filetype plugin on 
 
 " This enables Vim's and neovim's syntax-related features. Without this, some
 " VimTeX features will not work (see ":help vimtex-requirements" for more
