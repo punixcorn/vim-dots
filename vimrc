@@ -1,4 +1,5 @@
 " To install plugInstall use this
+"
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 "    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
@@ -39,7 +40,6 @@ Plug 'liuchengxu/vim-which-key'
 Plug 'dense-analysis/ale'
 call plug#end()
 
-
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ some settings -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 imap    jk <ESC>
 vmap    nm <ESC>
@@ -50,6 +50,7 @@ set tabstop=4
 set expandtab
 set shiftwidth=4
 set clipboard=unnamedplus
+set clipboard=unnamed
 set mouse=v
 set undofile 
 set undodir=~/.vim/plugged/vim_plugins/undodir
@@ -93,7 +94,7 @@ function! s:on_lsp_buffer_enabled() abort
 "    
 "    " refer to doc to add more commands
 endfunction
-let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
+let g:lsp_diagnostics_enabled = 1         " disable diagnostics support
 augroup lsp_install
     au!
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
@@ -179,7 +180,7 @@ let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 " want another compiler backend, you can change it as follows. The list of
 " supported backends and further explanation is provided in the documentation,
 " see ":help vimtex-compiler".
-let g:vimtex_compiler_method = 'latexrun'
+let g:vimtex_compiler_method = 'latexmk'
 
 " Most VimTeX mappings rely on localleader and this can be changed with the
 " following line. The default is usually fine and is the symbol "\".
@@ -195,4 +196,22 @@ let g:which_key_sep = ': '
 set timeoutlen=100
 
 let g:which_key_use_floating_win = 1
+
+" VIM UNDO PERSISTENCE
+let vimDir = '$HOME/.vim'
+
+if stridx(&runtimepath, expand(vimDir)) == -1
+  " vimDir is not on runtimepath, add it
+  let &runtimepath.=','.vimDir
+endif
+
+" Keep undo history across sessions by storing it in a file
+if has('persistent_undo')
+    let myUndoDir = expand(vimDir . '/undodir')
+    " Create dirs
+    call system('mkdir ' . vimDir)
+    call system('mkdir ' . myUndoDir)
+    let &undodir = myUndoDir
+    set undofile
+endif
 
