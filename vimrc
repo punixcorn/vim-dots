@@ -46,7 +46,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'preservim/nerdtree'
 " formating
 Plug 'vim-autoformat/vim-autoformat'
-
+Plug 'm-pilia/vim-ccls'
 call plug#end()
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ some settings -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
@@ -111,7 +111,34 @@ colorscheme onedark "gruvbox
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 
-" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ vim lsp -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+" -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ vim lsp servers -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
+
+" Register clang C++ lanuage server.
+" if executable('clangd')
+"     augroup lsp_clangd
+"         autocmd!
+"         autocmd User lsp_setup call lsp#register_server({
+"                     \ 'name': 'clangd',
+"                     \ 'cmd': {server_info->['clangd']},
+"                     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+"                     \ })
+"         autocmd FileType c setlocal omnifunc=lsp#complete
+"         autocmd FileType cpp setlocal omnifunc=lsp#complete
+"         autocmd FileType objc setlocal omnifunc=lsp#complete
+"         autocmd FileType objcpp setlocal omnifunc=lsp#complete
+"     augroup end
+" endif
+
+" Register ccls C++ lanuage server.
+if executable('ccls')
+    au User lsp_setup call lsp#register_server({
+                \ 'name': 'ccls',
+                \ 'cmd': {server_info->['ccls']},
+                \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+                \ 'initialization_options': {'cache': {'directory': expand('~/.cache/ccls') }},
+                \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+                \ })
+endif
 
 " for pyhton
 if executable('pylsp')
@@ -156,20 +183,6 @@ augroup END
 au BufWrite * :Autoformat
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ clang-format -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-if executable('clangd')
-    augroup lsp_clangd
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-                    \ 'name': 'clangd',
-                    \ 'cmd': {server_info->['clangd']},
-                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-                    \ })
-        autocmd FileType c setlocal omnifunc=lsp#complete
-        autocmd FileType cpp setlocal omnifunc=lsp#complete
-        autocmd FileType objc setlocal omnifunc=lsp#complete
-        autocmd FileType objcpp setlocal omnifunc=lsp#complete
-    augroup end
-endif
 
 let g:clang_format#style_options = {
             \ "AccessModifierOffset" : -4,
@@ -188,17 +201,6 @@ nmap <Leader>C :ClangFormatAutoToggle<CR>
 autocmd FileType c ClangFormatAutoEnable
 autocmd FileType cpp ClangFormatAutoEnable
 
-
-"-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ utlilsnips -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
-
-" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
-" - https://github.com/Valloric/YouCompleteMe
-" - https://github.com/nvim-lua/completion-nvim
-"let g:UltiSnipsExpandTrigger="<Tab>"
-"let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-"" If you want :UltiSnipsEdit to split your window.
-"let g:UltiSnipsEditSplit="vertical"
 
 " -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ vim snips -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ "
 " Expand
