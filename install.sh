@@ -18,3 +18,7 @@ sudo npm install -g js-beautify $prettier
 
 echo "[+] Installing Go formatter"
 sudo go install mvdan.cc/gofumpt@latest
+
+echo "[+] Running PlugInstall"
+sleep 1
+vim +PlugInstall\|q\!\|q\!
